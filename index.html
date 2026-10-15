@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px}
+img{max-width:100%}[hidden]{display:none!important}
+</style>
+<title>Radar Stratton O'Higgins</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,500;0,700;0,800;1,700;1,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: navy brand band with KPIs, filter rail, card grid; detail opens as a side sheet (full sheet on phones) */
+:root{
+  --ink:#0d1636;        /* Stratton navy */
+  --ink-2:#17234f;
+  --cyan:#0fe3d6;       /* Stratton turquoise */
+  --cyan-ink:#067a74;   /* turquoise legible on white */
+  --bg:#eef1f7;
+  --surface:#ffffff;
+  --surface-2:#f5f7fb;
+  --line:#dde2ee;
+  --fg:#111a3a;
+  --muted:#5b6587;
+  --hi:#0f8a5f; --hi-bg:#dcf5ea;
+  --mid:#a76400; --mid-bg:#fff0d2;
+  --lo:#5b6587; --lo-bg:#eceff5;
+  --shadow:0 1px 2px rgba(13,22,54,.06),0 8px 24px rgba(13,22,54,.07);
+  --f-display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-data:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#070c22;--surface:#0f1838;--surface-2:#131e45;--line:#24305e;--fg:#e8ecfb;--muted:#9aa5cc;
+  --cyan-ink:#2ff0e3;--ink:#050a1e;--ink-2:#0d1636;
+  --hi:#4ee0a6;--hi-bg:#0f3a2e;--mid:#ffc260;--mid-bg:#3b2c10;--lo:#9aa5cc;--lo-bg:#1c2650;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#070c22;--surface:#0f1838;--surface-2:#131e45;--line:#24305e;--fg:#e8ecfb;--muted:#9aa5cc;
+  --cyan-ink:#2ff0e3;--ink:#050a1e;--ink-2:#0d1636;
+  --hi:#4ee0a6;--hi-bg:#0f3a2e;--mid:#ffc260;--mid-bg:#3b2c10;--lo:#9aa5cc;--lo-bg:#1c2650;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+
+/* brand band (always navy) */
+.band{background:var(--ink);color:#fff;position:relative;overflow:hidden}
+.band::before,.band::after{content:"";position:absolute;border-radius:999px;background:#0fe3d6;transform:rotate(-40deg)}
+.band::before{width:220px;height:34px;right:-40px;top:26px;opacity:.95}
+.band::after{width:160px;height:34px;right:40px;top:80px;opacity:.35}
+.slab{position:absolute;inset:0;pointer-events:none;background:linear-gradient(135deg,transparent 40%,rgba(255,255,255,.035) 40%,rgba(255,255,255,.035) 62%,transparent 62%)}
+.band .wrap{position:relative;padding-block:28px 30px;display:grid;gap:22px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand svg{width:34px;height:34px;flex:none}
+.brand b{font-family:var(--f-display);font-style:italic;font-weight:800;font-size:22px;letter-spacing:-.01em}
+.brand b i{color:#0fe3d6;font-style:italic}
+.brand small{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#b8c2e6;font-style:italic;margin-top:-2px}
+h1{font-family:var(--f-display);font-weight:500;font-size:clamp(30px,5vw,48px);line-height:1.02;margin:0;letter-spacing:-.02em;text-wrap:balance;max-width:18ch}
+h1 em{font-style:italic;font-weight:800;color:#0fe3d6}
+h1 strong{font-style:italic;font-weight:800}
+.sub{color:#b8c2e6;max-width:62ch;margin:0}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.kpi{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px 14px}
+.kpi .v{font-family:var(--f-display);font-weight:800;font-style:italic;font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:12px;color:#b8c2e6;margin-top:4px}
+.kpi.hot .v{color:#0fe3d6}
+@media (max-width:640px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.band::before,.band::after{display:none}}
+
+/* filters */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar .wrap{padding-block:12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.search{flex:1 1 220px;min-width:0;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 12px;height:42px}
+.search input{border:0;background:transparent;outline:0;flex:1;min-width:0;height:100%}
+.search svg{width:16px;height:16px;color:var(--muted);flex:none}
+.seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:6px 12px;cursor:pointer;font-weight:600;font-size:13px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink-2);color:#fff}
+select.sel{height:42px;border-radius:12px;border:1px solid var(--line);background:var(--surface);padding:0 10px;font-weight:600;font-size:13px}
+.count{font-size:13px;color:var(--muted);margin-left:auto}
+
+/* grid */
+main .wrap{padding-block:22px 48px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px;cursor:pointer;text-align:left;box-shadow:var(--shadow);transition:transform .15s ease,border-color .15s ease}
+.card:hover{transform:translateY(-2px);border-color:var(--cyan-ink)}
+.top{display:flex;gap:12px;align-items:flex-start}
+.av{width:42px;height:42px;border-radius:12px;background:var(--ink-2);color:#fff;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-style:italic;font-size:18px;flex:none}
+.top .t{min-width:0;flex:1}
+.name{font-weight:700;font-size:16px;line-height:1.25;margin:0}
+.meta{font-size:13px;color:var(--muted)}
+.score{flex:none;text-align:right}
+.score .n{font-family:var(--f-display);font-weight:800;font-style:italic;font-size:24px;line-height:1;font-variant-numeric:tabular-nums}
+.score .n small{font-size:12px;color:var(--muted);font-style:normal;font-weight:500}
+.pill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:3px 9px}
+.p-Alta{color:var(--hi);background:var(--hi-bg)}.p-Media{color:var(--mid);background:var(--mid-bg)}.p-Baja{color:var(--lo);background:var(--lo-bg)}
+.meter{display:grid;grid-template-columns:3fr 3fr 2fr 2fr;gap:3px}
+.meter span{height:6px;border-radius:3px;background:var(--surface-2);border:1px solid var(--line);position:relative;overflow:hidden}
+.meter span i{position:absolute;inset:0;background:var(--cyan-ink);transform-origin:left}
+.service{font-size:13.5px;margin:0}
+.service b{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:2px}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-top:auto;padding-top:10px;border-top:1px dashed var(--line)}
+.stars{font-family:var(--f-data);font-size:12.5px;color:var(--fg)}
+.web{font-size:12px;font-weight:600}
+.web.no{color:var(--mid)}.web.yes{color:var(--cyan-ink)}
+.empty{grid-column:1/-1;text-align:center;padding:48px 16px;color:var(--muted)}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(5,10,30,.5);z-index:20}
+.sheet{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--surface);z-index:21;display:flex;flex-direction:column;box-shadow:-20px 0 40px rgba(5,10,30,.25);
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px);animation:in .22s ease}
+@keyframes in{from{transform:translateX(30px);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sheet{animation:none}.card{transition:none}}
+.sh-head{background:var(--ink);color:#fff;padding:18px 20px 20px;display:grid;gap:12px}
+.sh-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.x{border:0;background:rgba(255,255,255,.12);color:#fff;width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:18px}
+.sh-head h2{font-family:var(--f-display);font-style:italic;font-weight:800;font-size:26px;line-height:1.1;margin:0;text-wrap:balance}
+.sh-head .meta{color:#b8c2e6}
+.sh-body{overflow-y:auto;padding:18px 20px 28px;display:grid;gap:18px}
+.sec h3{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 8px;font-weight:700}
+.sec p{margin:0}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.fact{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:10px}
+.fact .v{font-family:var(--f-display);font-weight:800;font-style:italic;font-size:20px;font-variant-numeric:tabular-nums}
+.fact .l{font-size:12px;color:var(--muted)}
+.bk{display:grid;gap:8px}
+.bk-row{display:grid;grid-template-columns:110px 1fr 36px;gap:10px;align-items:center;font-size:13px}
+.bk-row .track{height:10px;border-radius:5px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.bk-row .track i{display:block;height:100%;background:var(--cyan-ink)}
+.bk-row .num{font-family:var(--f-data);font-size:12px;text-align:right;color:var(--muted)}
+.callout{background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px}
+.msg{background:var(--surface-2);border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:14px;font-size:14.5px;white-space:pre-wrap}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 16px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:14px;cursor:pointer;text-decoration:none;color:var(--fg)}
+.btn.pri{background:var(--ink-2);border-color:var(--ink-2);color:#fff}
+.btn.cy{background:#0fe3d6;border-color:#0fe3d6;color:#07122e}
+.btn svg{width:16px;height:16px}
+.contact{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-family:var(--f-data);font-size:14px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink-2);color:#fff;padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;z-index:30}
+.note{font-size:12.5px;color:var(--muted)}
+@media (max-width:420px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}.bk-row{grid-template-columns:90px 1fr 32px}}
+</style>
+</head>
+<body>
+
+
+<header class="band">
+  <div class="slab"></div>
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="4" width="10" height="34" rx="5" transform="rotate(40 11 21)" fill="#0fe3d6"/><rect x="22" y="2" width="10" height="34" rx="5" transform="rotate(40 27 19)" fill="#0fe3d6"/></svg>
+      <div><b>Stratt<i>on</i></b><small>Digital partner</small></div>
+    </div>
+    <h1>Leads de <strong>gastronomía y retail</strong> en <em>O'Higgins</em></h1>
+    <p class="sub">33 negocios de la Sexta Región con señales de que necesitan web, mejor presencia en Google o venta online. Ordenados por puntaje de oportunidad. Datos de Google Maps al 15-10-2026.</p>
+    <div class="kpis" id="kpis"></div>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <label class="search" for="q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Buscar negocio, rubro o señal" autocomplete="off"></label>
+    <div class="seg" role="group" aria-label="Prioridad" id="seg">
+      <button aria-pressed="true" data-p="">Todas</button><button aria-pressed="false" data-p="Alta">Alta</button><button aria-pressed="false" data-p="Media">Media</button><button aria-pressed="false" data-p="Baja">Baja</button>
+    </div>
+    <select class="sel" id="com" aria-label="Comuna"><option value="">Todas las comunas</option></select>
+    <select class="sel" id="tipo" aria-label="Tipo"><option value="">Gastronomía y retail</option><option value="g">Solo gastronomía</option><option value="r">Solo retail</option></select>
+    <span class="count" id="count"></span>
+  </div>
+</div>
+
+<main><div class="wrap"><div class="grid" id="grid"></div></div></main>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sh-name"></aside>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const LEADS = [{"n": "Pastelería Rodrigo", "r": "Pastelería", "c": "Rancagua", "d": "Av. Illanes 522 (+ sucursal Av. Bombero Villalobos 170)", "t": "+56 72 239 8554", "wa": "56722398554", "rt": 4.5, "rs": 813, "w": "web.pasteleriarodrigo.cl: dice 'Página en construcción', solo informativa; imágenes de categorías no cargan; íconos de redes apuntan a facebook.com/instagram.com genéricos", "v": "Sí", "s": "Reseñas: filas de +30 min para comprar un trozo de torta. 2 sucursales y contratando personal (aviso sept-2026). Pedidos solo por WhatsApp/teléfono. Ojo: web firmada por Agencia Emagenic.", "sv": "E-commerce de tortas con retiro programado por sucursal + pago online", "sc": [3, 3, 2, 2], "tot": 10, "p": "Alta", "m": "Hola, ¿cómo están? Soy [Nombre] de Stratton. Soy fan de sus tortas y vi que su web todavía dice 'en construcción' y que los pedidos se hacen solo por WhatsApp, mientras en tienda se forman filas largas. Ayudamos a pastelerías a recibir pedidos y pagos online con hora de retiro, para descongestionar el mesón. ¿Les puedo mostrar un ejemplo en 10 minutos esta semana?"}, {"n": "Mini Restaurant", "r": "Restaurante chileno", "c": "Olivar", "d": "Olivar Bajo, Olivar", "t": "+56 9 8463 9391", "wa": "56984639391", "rt": 4.6, "rs": 6346, "w": "minirestaurant.cl (Wix): carta enlazada a una carpeta de Google Drive; widget de Instagram sin configurar (muestra '@wix'); sin pedidos online", "v": "Sí", "s": "Más de 6.300 reseñas y local lleno con espera por mesa. Historia desde 1974, tercera generación. Gran volumen = alto impacto de una web bien hecha.", "sv": "Rediseño web con carta integrada (no Drive), reservas y SEO local", "sc": [2, 3, 2, 1], "tot": 8, "p": "Alta", "m": "Hola, soy [Nombre] de Stratton. Fui a ver la web del Mini y la historia desde 1974 está preciosa, pero la carta abre en una carpeta de Google Drive y el bloque de Instagram quedó con el texto de prueba '@wix'. Con más de 6.000 reseñas, mucha gente los busca en el celular antes de ir. ¿Les interesa que les mande una propuesta corta para dejar carta y reservas funcionando directo en la web?"}, {"n": "La Picá del Negro", "r": "Restaurante chileno", "c": "Pichilemu", "d": "José Joaquín Prieto 350", "t": "+56 72 284 2830", "wa": "56722842830", "rt": 4.2, "rs": 2937, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Casi 3.000 reseñas, pero varias recientes hablan de esperas de 40 min y mesas sin atender. Rating 4,2 arrastrado por servicio. Público turista en temporada.", "sv": "Lista de espera/reservas online + gestión de reseñas en Google", "sc": [3, 3, 2, 0], "tot": 8, "p": "Alta", "m": "Hola, soy [Nombre] de Stratton. La Picá es parada obligada en Pichilemu, pero vi que varias reseñas recientes en Google mencionan esperas largas y eso les baja la nota. Trabajamos con restaurantes de alto flujo para ordenar reservas/lista de espera online y responder reseñas, antes de que llegue la temporada de verano. ¿Conversamos 10 minutos?"}, {"n": "Rigoletto Restaurante", "r": "Restaurante / pastelería", "c": "San Fernando", "d": "Av. Manuel Rodríguez 751", "t": "+56 9 3919 2010", "wa": "56939192010", "rt": 4.2, "rs": 1093, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Más de 1.000 reseñas; reseñas negativas sobre atención sin respuesta del local. Mezcla restaurante, cafetería, heladería y pastelería: mucho catálogo para mostrar.", "sv": "Web con carta y pedidos de tortas + gestión de reputación", "sc": [3, 3, 2, 0], "tot": 8, "p": "Alta", "m": "Hola, soy [Nombre] de Stratton. Rigoletto tiene más de mil reseñas en Google, pero vi algunas negativas sin respuesta que pesan en la nota. Ayudamos a locales de San Fernando a cuidar su reputación online y a vender tortas y helados por encargo desde su propia web. ¿Les puedo mandar un diagnóstico gratis de su perfil?"}, {"n": "SonríeTé – La Tetería de Rengo", "r": "Cafetería / tienda de té", "c": "Rengo", "d": "Morán 206-298", "t": "+56 72 257 8307", "wa": "56722578307", "rt": 4.6, "rs": 235, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Venden té a granel y accesorios (teteras, infusores) en tienda: producto ideal para vender online a todo Chile. Algunas reseñas negativas de atención.", "sv": "Tienda online de tés y accesorios con despacho nacional", "sc": [3, 2, 2, 1], "tot": 8, "p": "Alta", "m": "Hola, soy [Nombre] de Stratton. Me encantó que tengan té a granel y accesorios para amantes del té; es justo el tipo de producto que se vende muy bien online fuera de Rengo. No encontré una tienda web suya, ¿lo han pensado? Armamos tiendas online simples con despacho a todo Chile. ¿Les muestro un ejemplo?"}, {"n": "Aroma Limeño", "r": "Restaurante peruano", "c": "Machalí", "d": "Av. San Juan 202", "t": "+56 72 248 9928", "wa": "56722489928", "rt": 4.6, "rs": 2993, "w": "aromalimeno.cl: WordPress con tema de 2019; la carta es un PDF de oct-2024; delivery deriva a un sistema externo", "v": "Sí", "s": "Casi 3.000 reseñas. También ofrece tortas y banquetería: servicios que se venden mejor con una web actual.", "sv": "Renovación web: carta digital actualizable, banquetería con cotizador, SEO", "sc": [2, 3, 1, 1], "tot": 7, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Revisé la web de Aroma Limeño y la carta que se descarga es un PDF de octubre 2024; además la banquetería y las tortas quedan un poco escondidas. Con casi 3.000 reseñas, una web actualizada puede traerles más eventos. ¿Les mando una propuesta de renovación sin compromiso?"}, {"n": "Bocas del Mar", "r": "Restaurante peruano", "c": "Pichilemu", "d": "Av. Costanera 730", "t": "+56 9 7568 6598", "wa": "56975686598", "rt": 4.4, "rs": 1532, "w": "bocasdelmar.cl respondió con error (401) al revisarlo: posible web caída o protegida", "v": "Parcial", "s": "1.500+ reseñas, muchas de turistas extranjeros. Abierto todos los días hasta medianoche. Comentan que se llena.", "sv": "Web bilingüe (ES/EN) con carta y reservas", "sc": [2, 3, 1, 1], "tot": 7, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Intenté entrar a bocasdelmar.cl y me dio error. Como muchos de sus clientes son turistas que buscan desde el celular (incluso en inglés), puede que estén perdiendo reservas. Hacemos webs bilingües con carta y reservas. ¿Quieren que revise qué está pasando con el dominio?"}, {"n": "Levir Florería", "r": "Florería (retail)", "c": "Machalí", "d": "Av. Monseñor Escrivá de Balaguer 2-A", "t": "+56 9 8305 9209", "wa": "56983059209", "rt": 5.0, "rs": 141, "w": "Existe levir.cl, pero no se pudo revisar automáticamente: confirmar si tiene tienda online", "v": "Parcial", "s": "Nota 5,0. Reseñas de clientes que compran desde Santiago y desde Francia por WhatsApp para entregas express. Demanda remota clara.", "sv": "E-commerce de arreglos con pago online y agenda de despacho", "sc": [1, 2, 2, 2], "tot": 7, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Leí reseñas de clientes que les encargan flores desde Santiago y hasta desde Francia por WhatsApp, ¡y con nota 5,0! Ayudamos a florerías a recibir esos pedidos con pago y horario de entrega directo en la web, para no depender de coordinar todo por chat. ¿Les interesa ver cómo funcionaría?"}, {"n": "Cafetería Estado", "r": "Cafetería", "c": "Rancagua", "d": "Estado 653, Local 1", "t": "+56 9 5093 1240", "wa": "56950931240", "rt": 4.9, "rs": 45, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Nota 4,9. Una reseña menciona que no tienen carta física ni digital a mano.", "sv": "Carta digital QR + landing + optimización de perfil Google", "sc": [3, 1, 2, 1], "tot": 7, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Vi que tienen nota 4,9 en Google, felicitaciones. Un cliente comentó que le costó ver la carta porque no hay versión física ni digital; armamos cartas digitales con QR y una página simple que además ayuda a aparecer en Google. ¿Les muestro un ejemplo?"}, {"n": "Tregül Café de Especialidad", "r": "Cafetería de especialidad", "c": "Rancagua", "d": "Almarza 719", "t": "+56 9 7935 0132", "wa": "56979350132", "rt": 4.8, "rs": 116, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Sábados muy llenos: reseña cuenta que tuvieron que ir a pagar a caja porque no alcanzaba el personal. Concepto con juegos de mesa (diferenciador para contenido).", "sv": "Carta QR con pedido en mesa + landing + contenido para redes", "sc": [3, 1, 2, 1], "tot": 7, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Leí que los sábados Tregül se llena tanto que la gente termina yendo a pagar a la caja. Una carta QR con pedido desde la mesa puede aliviar mucho al equipo en esos peaks. ¿Les interesa que les cuente cómo lo implementamos en otras cafeterías?"}, {"n": "Café Kupa", "r": "Cafetería de especialidad", "c": "Rancagua", "d": "Gamero 440", "t": null, "wa": null, "rt": 4.8, "rs": 242, "w": "No encontré web propia; no tiene teléfono en Google", "v": "No", "s": "Reseña: llegaron y no estaba abierto en el horario indicado. Perfil de Google sin teléfono = clientes no pueden confirmar.", "sv": "Perfil Google completo + landing con horarios y orígenes de café", "sc": [3, 2, 2, 0], "tot": 7, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Café Kupa sale muy bien evaluado, pero su perfil de Google no tiene teléfono y una reseña cuenta que llegaron y estaba cerrado. Dejamos perfiles y webs con horarios siempre al día. ¿Les puedo enviar un diagnóstico gratuito? (Contactar por Instagram o visita presencial)"}, {"n": "DulcemenTe Cafetería", "r": "Cafetería", "c": "Rancagua", "d": "Av. Bombero Villalobos 1133, Locales 10-12", "t": "+56 72 241 4013", "wa": "56722414013", "rt": 4.5, "rs": 381, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Ocupa 3 locales (creció). Aparece en Tripadvisor entre las top cafeterías de Rancagua. Reseñas: estacionamiento limitado.", "sv": "Web con carta, pedidos para llevar/retiro y encargos de tortas", "sc": [3, 2, 1, 1], "tot": 7, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. DulcemenTe aparece entre las cafeterías mejor evaluadas de Rancagua. Vi que el estacionamiento es un tema; pedir por la web y pasar a retirar puede ser una buena solución para esos clientes. ¿Les muestro cómo funcionaría?"}, {"n": "Restaurant Pasión Norteña", "r": "Restaurante peruano (buffet y carta)", "c": "San Fernando", "d": "Av. Bernardo O'Higgins 895", "t": "+56 9 2167 5382", "wa": "56921675382", "rt": 4.6, "rs": 483, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Recibe grupos grandes y celebraciones; buffet + carta. Buen candidato para reservas de grupos y eventos.", "sv": "Landing con carta, buffet y formulario de reservas/eventos", "sc": [3, 2, 1, 1], "tot": 7, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Vi en las reseñas que muchos los eligen para celebraciones y grupos grandes. Una página con carta, buffet y un formulario de reservas para eventos les puede traer más de esas mesas. ¿Conversamos 10 minutos?"}, {"n": "Wine Outlet", "r": "Tienda de vinos", "c": "Santa Cruz", "d": "Horacio Muñoz 52", "t": "+56 9 9170 0750", "wa": "56991700750", "rt": 4.5, "rs": 453, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Vinos de viña a precios bajos en un container; muy recomendado por turistas. Abre pocos días a la semana: la venta online ampliaría su horario. El dueño también tiene cabañas (Tiny Cabañas).", "sv": "Tienda online de vinos con despacho + cross-sell con cabañas", "sc": [3, 2, 1, 1], "tot": 7, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Muchos turistas los recomiendan por los precios y la asesoría, pero solo abren algunos días. Una tienda online les permitiría vender esas cajas a clientes que ya volvieron a Santiago. ¿Les interesa ver una propuesta?"}, {"n": "Restaurante Los Poetas", "r": "Restaurante chileno", "c": "Santa Cruz", "d": "Camino Los Boldos, sector Barreales", "t": "+56 72 282 1284", "wa": "56722821284", "rt": 4.5, "rs": 188, "w": "Reseña indica que lo publicado online (menú de 3 tiempos de temporada) no coincidía con lo disponible", "v": "No", "s": "Información online desactualizada genera expectativas no cumplidas. Público turista del Valle de Colchagua.", "sv": "Web con carta autoadministrable y bilingüe", "sc": [2, 2, 2, 0], "tot": 6, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Un visitante comentó en Google que el menú de temporada que vio online no estaba disponible al llegar. Hacemos webs donde ustedes mismos actualizan la carta en minutos, en español e inglés. ¿Les mando un ejemplo?"}, {"n": "Restaurante La Casita de Barreales", "r": "Restaurante peruano", "c": "Santa Cruz", "d": "Nicolás Palacios 221", "t": "+56 9 6526 4411", "wa": "56965264411", "rt": 4.5, "rs": 1112, "w": "Existe lacasitadebarreales.cl pero no se pudo revisar automáticamente", "v": "Parcial", "s": "1.100+ reseñas, gran parte de turistas extranjeros en inglés. Entorno de viñas: excelente material visual.", "sv": "Auditoría web + versión en inglés + reservas", "sc": [1, 3, 1, 1], "tot": 6, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Gran parte de sus reseñas son de turistas extranjeros que vienen al Valle de Colchagua. ¿Su web tiene versión en inglés y reservas online? Ayudamos a restaurantes de la zona a captar más de ese público. Les puedo hacer una revisión gratis."}, {"n": "Hey! Coffee RestoBar", "r": "Restobar", "c": "Rengo", "d": "José Bisquertt 284, Local 2", "t": "+56 9 3408 3887", "wa": "56934083887", "rt": 4.1, "rs": 82, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Reseñas mixtas (precios, demoras). Horario de domingo en Google parece mal cargado (10:30 a 11:30 AM).", "sv": "Perfil Google corregido + landing + gestión de reseñas", "sc": [3, 1, 2, 0], "tot": 6, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Revisando su perfil de Google noté que el horario del domingo aparece de 10:30 a 11:30 AM, probablemente un error que les puede estar costando clientes. Ayudamos a negocios de Rengo con su presencia online y reseñas. ¿Les cuento cómo?"}, {"n": "El Marinero Peruano", "r": "Restaurante peruano", "c": "Rancagua", "d": "Alcázar 324", "t": "+56 9 9557 6760", "wa": "56995576760", "rt": 4.8, "rs": 161, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Nota 4,8, pero reseñas dicen que el local 'casi no se nota' desde afuera. Acepta Amipass (gancho para público oficina).", "sv": "Landing + Google Ads local para almuerzo de oficina", "sc": [3, 1, 2, 0], "tot": 6, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Sus clientes los ponen con 4,8, pero varios dicen que el local pasa desapercibido desde la calle. Ahí lo digital ayuda mucho: una página y anuncios locales para la gente que busca 'almuerzo peruano en Rancagua'. ¿Les interesa?"}, {"n": "Restaurant Agasajo", "r": "Restaurante mediterráneo", "c": "Pichilemu", "d": "Catrianca s/n, Punta de Lobos", "t": "+56 9 9822 2927", "wa": "56998222927", "rt": 5.0, "rs": 71, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Restaurante gourmet nuevo con nota 5,0 en Punta de Lobos. Atiende jueves a domingo: necesita reservas.", "sv": "Web de marca premium con reservas", "sc": [3, 1, 0, 2], "tot": 6, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Felicitaciones por el 5,0 en Google, se nota que Agasajo partió muy bien. Para un restaurante gourmet en Punta de Lobos, una web cuidada con reservas puede marcar la diferencia esta temporada. ¿Les mando ideas sin compromiso?"}, {"n": "Sra Fang Machalí", "r": "Restaurante asiático", "c": "Machalí", "d": "Av. San Juan 1157, Local 19", "t": "+56 9 6287 0696", "wa": "56962870696", "rt": 4.9, "rs": 313, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Nota 4,9 con 300+ reseñas: buen momento para escalar a pedidos para llevar/delivery propio.", "sv": "Web con pedidos para retiro/delivery propio (sin comisión de apps)", "sc": [3, 2, 0, 1], "tot": 6, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Con 4,9 en Google, Sra Fang tiene clientes muy fieles. ¿Han pensado en recibir pedidos para retiro desde su propia web, sin pagar comisión a las apps? Lo implementamos rápido. ¿Les muestro?"}, {"n": "Donde Claudio", "r": "Restaurante chileno (menú del día)", "c": "San Fernando", "d": "Chacabuco 128", "t": "+56 72 271 4754", "wa": "56722714754", "rt": 4.5, "rs": 495, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Menú del día, abre solo almuerzo. Ideal publicar el menú diario online/WhatsApp.", "sv": "Landing con menú del día actualizable + catálogo WhatsApp", "sc": [3, 2, 1, 0], "tot": 6, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Leí muy buenas reseñas de su menú del día. ¿Publican el menú diario en algún lado? Una página simple que ustedes actualicen cada mañana ayuda a que la gente de la oficina los elija. ¿Les interesa verlo?"}, {"n": "La Casa del Tío Pepe", "r": "Restaurante peruano", "c": "San Fernando", "d": "Chacabuco 894", "t": "+56 9 8354 8875", "wa": "56983548875", "rt": 4.5, "rs": 415, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Atiende en inglés y español (turistas). Alguna reseña sobre atención lenta.", "sv": "Landing bilingüe con carta y reservas", "sc": [3, 2, 1, 0], "tot": 6, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Vi que atienden en inglés y español, algo muy valorado por los turistas en San Fernando. ¿Tienen una página con carta y reservas que ellos encuentren al buscar en Google? Les puedo mostrar un ejemplo."}, {"n": "El Emporio", "r": "Picada / pizzería", "c": "San Fernando", "d": "Camino Real 2080", "t": "+56 9 6878 3691", "wa": "56968783691", "rt": 4.3, "rs": 15, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Reciben pedidos por WhatsApp y hacen eventos. Pocas reseñas y mixtas.", "sv": "Catálogo de pedidos online + campaña de reseñas", "sc": [3, 0, 2, 1], "tot": 6, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Vi que reciben pedidos por WhatsApp y que hacen celebraciones. Un catálogo online para pedir y una estrategia para juntar más reseñas buenas los puede hacer crecer harto. ¿Conversamos?"}, {"n": "La Marplatense", "r": "Panadería argentina", "c": "Rancagua", "d": "Av. Bombero Villalobos 465", "t": "+56 9 9346 3869", "wa": "56993463869", "rt": 4.8, "rs": 84, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Productos argentinos caseros; también registrado como mayorista/fabricante: potencial B2B (cafeterías).", "sv": "Catálogo online B2C + mayorista para cafeterías", "sc": [3, 1, 1, 1], "tot": 6, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Sus medialunas tienen fama de ser las mejores de Rancagua. Vi que también venden por mayor: un catálogo online para particulares y otro para cafeterías podría abrirles mucho mercado. ¿Les muestro una idea?"}, {"n": "Míster Wines", "r": "Tienda de vinos", "c": "Santa Cruz", "d": "Ruta 90", "t": "+56 9 6527 6976", "wa": "56965276976", "rt": 4.9, "rs": 12, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Vinos y cervezas locales, sales saborizadas; turistas de la Ruta del Vino. Pocas reseñas.", "sv": "Tienda online + campaña de reseñas", "sc": [3, 0, 1, 2], "tot": 6, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. Los turistas que pasan por la Ruta 90 hablan muy bien de su selección de vinos locales. ¿Han pensado en vender online para que esos clientes vuelvan a comprar desde su casa? ¿Les cuento cómo?"}, {"n": "Amor y Waffles Rengo", "r": "Cafetería / waffles", "c": "Rengo", "d": "Manuel Rodríguez 50", "t": "+56 9 8638 9901", "wa": "56986389901", "rt": 5.0, "rs": 36, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Negocio nuevo con nota 5,0 y local pequeño: pedidos para llevar son clave para crecer.", "sv": "Carta online con pedidos para retiro", "sc": [3, 0, 1, 2], "tot": 6, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. ¡5,0 en Google, felicitaciones! Como el local es pequeño, recibir pedidos para retirar desde una carta online les puede ayudar a vender más sin necesitar más mesas. ¿Les interesa verlo?"}, {"n": "Tienda de Surf Backside", "r": "Tienda de surf", "c": "Pichilemu", "d": "Eugenio Díaz Lira 388", "t": "+56 9 9833 0413", "wa": "56998330413", "rt": 5.0, "rs": 4, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Tablas custom, equipo nuevo y usado. Horarios en Google mal cargados (aparece cierre a las 7:00 AM).", "sv": "Catálogo online de tablas/usados + corregir perfil Google", "sc": [3, 0, 2, 1], "tot": 6, "p": "Media", "m": "Hola, soy [Nombre] de Stratton. En Google su horario aparece cerrando a las 7 de la mañana, puede que eso les esté espantando clientes. Además, un catálogo online de tablas custom y usadas vendería muy bien. ¿Les cuento?"}, {"n": "Restaurante La Picá de Pelluco", "r": "Picada de pescados y mariscos", "c": "Rancagua", "d": "Dr. Salinas 1050", "t": "+56 9 5055 1929", "wa": "56950551929", "rt": 4.5, "rs": 105, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Solo almuerzo (11:00–15:30). Muy buenas reseñas de sabor; local sencillo.", "sv": "Landing con carta + perfil Google con fotos", "sc": [3, 1, 1, 0], "tot": 5, "p": "Baja", "m": "Hola, soy [Nombre] de Stratton. Leí reseñas que dicen que tienen uno de los mejores pebres de Rancagua. Una página simple con su carta y fotos ayuda a que más gente los encuentre a la hora de almuerzo. ¿Les muestro un ejemplo?"}, {"n": "Pastelería y Panadería Reina Isabel", "r": "Pastelería", "c": "Rancagua", "d": "Recreo 2167", "t": "+56 72 245 0369", "wa": "56722450369", "rt": 5.0, "rs": 24, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Hacen tortas por encargo (cumpleaños); clientes piden productos que no siempre hay.", "sv": "Catálogo de tortas por encargo con formulario", "sc": [3, 0, 1, 1], "tot": 5, "p": "Baja", "m": "Hola, soy [Nombre] de Stratton. Sus clientes los ponen con 5,0 y hablan de sus tortas de cumpleaños. Un catálogo online para encargar tortas con fecha les ordenaría los pedidos. ¿Les interesa?"}, {"n": "The Spot Art Gallery – Tienda Centro", "r": "Tienda de ropa", "c": "Rancagua", "d": "O'Carrol 603, Local 1", "t": "+56 9 5922 4958", "wa": "56959224958", "rt": 5.0, "rs": 14, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Retail de ropa con nota 5,0 y novedades constantes. Pocas reseñas.", "sv": "Tienda online / catálogo + Instagram Shopping", "sc": [3, 0, 1, 1], "tot": 5, "p": "Baja", "m": "Hola, soy [Nombre] de Stratton. Vi que siempre tienen novedades y ofertas en la tienda del centro. ¿Venden online? Les podemos armar una tienda simple conectada a Instagram. ¿Les muestro un ejemplo?"}, {"n": "D'licia Criolla", "r": "Cafetería / almuerzo", "c": "Rengo", "d": "José Bisquertt 218", "t": null, "wa": null, "rt": 4.7, "rs": 83, "w": "No encontré web; sin teléfono en Google", "v": "No", "s": "Menú con opciones para dietas especiales (sin lactosa, veggie) — diferenciador poco comunicado.", "sv": "Perfil Google completo + carta online destacando opciones especiales", "sc": [3, 1, 1, 0], "tot": 5, "p": "Baja", "m": "Hola, soy [Nombre] de Stratton. Vi que ofrecen opciones sin lactosa y vegetarianas, algo que mucha gente busca en Google. Su perfil no tiene teléfono ni carta online; podemos ayudarles a destacarlo. (Contactar presencial o por Instagram)"}, {"n": "Café La Despensa", "r": "Cafetería", "c": "Rengo", "d": "Arturo Prat 317", "t": "+56 9 8439 4150", "wa": "56984394150", "rt": 4.6, "rs": 79, "w": "No encontré web propia en revisión rápida", "v": "No", "s": "Buena reputación, decoración vintage. Sin señal de dolor fuerte.", "sv": "Landing + carta QR", "sc": [3, 1, 0, 0], "tot": 4, "p": "Baja", "m": "Hola, soy [Nombre] de Stratton. Café La Despensa tiene clientes muy fieles en Rengo. ¿Les gustaría tener una carta digital y una página simple para aparecer mejor en Google? ¿Les muestro un ejemplo?"}, {"n": "Dreamstyle Surf Company", "r": "Tienda de surf", "c": "Pichilemu", "d": "Manuel Rodríguez 355", "t": "+56 72 284 3054", "wa": "56722843054", "rt": 5.0, "rs": 15, "w": "dreamstyle.cl: tienda WooCommerce activa, pero feed de Instagram con posts de 2023 sin imagen, links de políticas vacíos y horario distinto al de Google", "v": "Sí", "s": "Ya vende online: lead de optimización (SEO, rendimiento, Ads), no de web nueva.", "sv": "Optimización e-commerce + SEO + campañas Google Shopping", "sc": [1, 0, 2, 1], "tot": 4, "p": "Baja", "m": "Hola, soy [Nombre] de Stratton. Revisé la tienda de dreamstyle.cl y está muy completa; noté detalles fáciles de arreglar (feed de Instagram sin imágenes, links de políticas vacíos, horarios distintos a Google). ¿Les sirve un diagnóstico gratis de SEO y conversión?"}];
+LEADS.forEach((l,i)=>{l.id=i;l.retail=/florer|tienda|surf/i.test(l.r)});
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const st={q:'',p:'',c:'',t:''};
+try{const s=JSON.parse(localStorage.getItem('radar-f')||'{}');Object.assign(st,s)}catch(e){}
+
+// KPIs
+const by=p=>LEADS.filter(l=>l.p===p).length;
+const sinWeb=LEADS.filter(l=>/No encontré/i.test(l.w)).length;
+$('#kpis').innerHTML=[[LEADS.length,'leads en 7 comunas'],[by('Alta'),'prioridad alta','hot'],[by('Media'),'prioridad media'],[sinWeb,'sin web propia detectada']]
+ .map(([v,l,c])=>`<div class="kpi ${c||''}"><div class="v">${v}</div><div class="l">${l}</div></div>`).join('');
+
+[...new Set(LEADS.map(l=>l.c))].sort().forEach(c=>$('#com').insertAdjacentHTML('beforeend',`<option>${esc(c)}</option>`));
+
+const ini=n=>n.replace(/^(Restaurant(e)?|Pastelería y Panadería|Pastelería|Café|Cafetería|Tienda de Surf|The|La|El)\s+/i,'').trim()[0].toUpperCase();
+const stars=r=>`★ ${r.toFixed(1).replace('.',',')}`;
+const fmt=n=>n.toLocaleString('es-CL');
+const webTag=l=>/No encontré/i.test(l.w)?'<span class="web no">Sin web detectada</span>':'<span class="web yes">Tiene web · revisar</span>';
+
+function render(){
+  const q=st.q.trim().toLowerCase();
+  const list=LEADS.filter(l=>(!st.p||l.p===st.p)&&(!st.c||l.c===st.c)&&(!st.t||(st.t==='r')===l.retail)&&
+    (!q||[l.n,l.r,l.c,l.s,l.sv].join(' ').toLowerCase().includes(q)));
+  $('#count').textContent=`${list.length} de ${LEADS.length}`;
+  $('#grid').innerHTML=list.length?list.map(l=>`
+   <button class="card" data-id="${l.id}" aria-label="Ver detalle de ${esc(l.n)}">
+     <div class="top">
+       <div class="av" aria-hidden="true">${esc(ini(l.n))}</div>
+       <div class="t"><p class="name">${esc(l.n)}</p><div class="meta">${esc(l.r)} · ${esc(l.c)}</div></div>
+       <div class="score"><div class="n">${l.tot}<small>/10</small></div><span class="pill p-${l.p}">${l.p}</span></div>
+     </div>
+     <div class="meter" title="Web · Volumen · Dolor · Crecimiento">${l.sc.map((v,i)=>`<span><i style="transform:scaleX(${v/[3,3,2,2][i]})"></i></span>`).join('')}</div>
+     <p class="service"><b>Qué ofrecerle</b>${esc(l.sv)}</p>
+     <div class="foot"><span class="stars">${stars(l.rt)} · ${fmt(l.rs)} reseñas</span>${webTag(l)}</div>
+   </button>`).join(''):`<div class="empty">Ningún lead coincide con estos filtros. Prueba con otra comuna o prioridad.</div>`;
+  document.querySelectorAll('#seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.p===st.p));
+  $('#q').value=st.q;$('#com').value=st.c;$('#tipo').value=st.t;
+  try{localStorage.setItem('radar-f',JSON.stringify(st))}catch(e){}
+}
+
+const LBL=[['Sin web / web débil',3],['Volumen de reseñas',3],['Dolor visible',2],['Crecimiento',2]];
+let lastFocus=null;
+function open(id){
+  const l=LEADS[id];lastFocus=document.activeElement;
+  const maps='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(l.n+' '+l.d+' '+l.c);
+  const wa=l.wa?'https://wa.me/'+l.wa+'?text='+encodeURIComponent(l.m):null;
+  $('#sheet').innerHTML=`
+   <div class="sh-head">
+     <div class="sh-row"><span class="pill p-${l.p}">Prioridad ${l.p}</span><button class="x" id="close" aria-label="Cerrar">✕</button></div>
+     <h2 id="sh-name">${esc(l.n)}</h2>
+     <div class="meta">${esc(l.r)} · ${esc(l.d)}, ${esc(l.c)}</div>
+   </div>
+   <div class="sh-body">
+     <div class="facts">
+       <div class="fact"><div class="v">${l.tot}/10</div><div class="l">Puntaje</div></div>
+       <div class="fact"><div class="v">${l.rt.toFixed(1).replace('.',',')}</div><div class="l">Nota Google</div></div>
+       <div class="fact"><div class="v">${fmt(l.rs)}</div><div class="l">Reseñas</div></div>
+     </div>
+     <section class="sec"><h3>Por qué tiene este puntaje</h3><div class="bk">
+       ${LBL.map(([n,mx],i)=>`<div class="bk-row"><span>${n}</span><span class="track"><i style="width:${l.sc[i]/mx*100}%"></i></span><span class="num">${l.sc[i]}/${mx}</span></div>`).join('')}
+     </div></section>
+     <section class="sec"><h3>Señales de oportunidad</h3><p>${esc(l.s)}</p></section>
+     <section class="sec"><h3>Web y presencia actual</h3><div class="callout">${esc(l.w)}<div class="note" style="margin-top:6px">${l.v==='Sí'?'Revisado directamente el 15-10-2026.':l.v==='Parcial'?'Revisión parcial: confirma entrando a la web.':'Revisión rápida: confirma en Google Maps e Instagram antes de escribir.'}</div></div></section>
+     <section class="sec"><h3>Qué ofrecerle</h3><p><strong>${esc(l.sv)}</strong></p></section>
+     <section class="sec"><h3>Mensaje sugerido</h3><div class="msg" id="msg">${esc(l.m)}</div>
+       <p class="note" style="margin-top:6px">Reemplaza [Nombre] por tu nombre antes de enviar.</p></section>
+     <section class="sec"><h3>Contacto</h3>
+       <div class="contact"><span id="tel">${esc(l.t||'Sin teléfono en Google: visita presencial o Instagram')}</span>${l.t?'<button class="btn" id="cpt">Copiar teléfono</button>':''}</div></section>
+     <div class="actions">
+       <button class="btn pri" id="cpm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>Copiar mensaje</button>
+       ${wa?`<a class="btn cy" href="${wa}" target="_blank" rel="noopener">Abrir en WhatsApp</a>`:''}
+       <a class="btn" href="${maps}" target="_blank" rel="noopener">Ver en Google Maps</a>
+     </div>
+   </div>`;
+  $('#scrim').hidden=false;$('#sheet').hidden=false;document.body.style.overflow='hidden';
+  $('#close').onclick=close;$('#close').focus();
+  $('#cpm').onclick=()=>copy(l.m,'Mensaje copiado','#msg');
+  if(l.t)$('#cpt').onclick=()=>copy(l.t,'Teléfono copiado','#tel');
+}
+function close(){$('#scrim').hidden=true;$('#sheet').hidden=true;document.body.style.overflow='';lastFocus&&lastFocus.focus()}
+function copy(text,ok,sel){
+  const fb=()=>{const r=document.createRange();r.selectNodeContents($(sel));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Texto seleccionado: cópialo con Ctrl/Cmd + C')};
+  try{navigator.clipboard.writeText(text).then(()=>toast(ok),fb)}catch(e){fb()}
+}
+let tt;function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(tt);tt=setTimeout(()=>el.hidden=true,2200)}
+
+$('#grid').addEventListener('click',e=>{const c=e.target.closest('.card');if(c)open(+c.dataset.id)});
+$('#scrim').onclick=close;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#sheet').hidden)close()});
+$('#q').addEventListener('input',e=>{st.q=e.target.value;render()});
+$('#seg').addEventListener('click',e=>{const b=e.target.closest('button');if(b){st.p=b.dataset.p;render()}});
+$('#com').onchange=e=>{st.c=e.target.value;render()};
+$('#tipo').onchange=e=>{st.t=e.target.value;render()};
+render();
+</script>
+
+</body>
+</html>
